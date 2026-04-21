@@ -108,6 +108,14 @@ export const db = {
         writeData('candidates', candidates);
         return candidates[index];
       }
+    },
+    delete: async ({ where }: any) => {
+      const candidates = readData('candidates');
+      const index = candidates.findIndex((c: any) => c.id === where.id);
+      if (index === -1) throw new Error('Aday bulunamadı');
+      const deleted = candidates.splice(index, 1)[0];
+      writeData('candidates', candidates);
+      return deleted;
     }
   },
   analysis: {
@@ -121,6 +129,18 @@ export const db = {
       analyses.push(newAnalysis);
       writeData('analyses', analyses);
       return newAnalysis;
+    },
+    deleteMany: async ({ where }: any) => {
+      const analyses = readData('analyses');
+      const filtered = analyses.filter((a: any) => {
+        for (const key in where) {
+          if (a[key] !== where[key]) return true;
+        }
+        return false;
+      });
+      const count = analyses.length - filtered.length;
+      writeData('analyses', filtered);
+      return { count };
     }
   },
   employee: {

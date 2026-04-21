@@ -60,17 +60,17 @@ export async function POST(request: Request) {
 
     const result = await model.generateContent(prompt);
     let text = result.response.text().trim();
-    
+
     // JSON Temizleme
     const firstBrace = text.indexOf('{');
     const lastBrace = text.lastIndexOf('}');
     if (firstBrace !== -1 && lastBrace !== -1) {
       text = text.substring(firstBrace, lastBrace + 1);
     }
-    
+
     try {
       const analysisData = JSON.parse(text);
-      
+
       // 5. Analizi Kaydet
       await db.analysis.create({
         data: {

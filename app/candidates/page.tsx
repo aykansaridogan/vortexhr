@@ -23,6 +23,25 @@ export default function CandidatesPage() {
     setIsLoading(false);
   };
 
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm('Bu adayı silmek istediğinize emin misiniz?')) return;
+    
+    try {
+      const res = await fetch(`/api/candidates/${id}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        setCandidates(candidates.filter(c => c.id !== id));
+      } else {
+        alert('Silme işlemi başarısız oldu.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Silme sırasında bir hata oluştu.');
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "SCREENING": return "#3498db";
@@ -137,7 +156,11 @@ export default function CandidatesPage() {
                     {new Date(candidate.createdAt).toLocaleDateString('tr-TR')}
                   </td>
                   <td style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>
-                    <button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                    <button 
+                      onClick={(e) => handleDelete(candidate.id, e)}
+                      title="Sil"
+                      style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+                    >
                       <MoreHorizontal size={18} />
                     </button>
                   </td>
