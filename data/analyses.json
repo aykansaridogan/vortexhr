@@ -1,22 +1,5 @@
 [
   {
-    "technicalScore": 92,
-    "softSkillsScore": 88,
-    "decision": "POSITIVE",
-    "summary": "Aykan SARIDOĞAN, modern frontend teknolojilerinde (React, TypeScript, Next.js) derinlemesine uzmanlığa sahip, mimari tasarım ve performans optimizasyonu konularında yetkin bir Senior Frontend Developer profili çizmektedir. Büyük ölçekli projelerdeki deneyimi ve teknik karar alma süreçlerindeki olgunluğu, kendisini pozisyon için güçlü bir aday yapmaktadır.",
-    "strengths": [
-      "Modern JavaScript framework'lerinde (React, Next.js) ileri düzey teknik yetkinlik",
-      "Kod kalitesi, ölçeklenebilir mimari ve performans optimizasyonu konularında kanıtlanmış deneyim"
-    ],
-    "weaknesses": [
-      "Backend entegrasyonu ve sunucu tarafı süreçlerinde (Node.js/Server-side) derinleşme ihtiyacı",
-      "Ekip içi mentorluk ve teknik liderlik konusunda daha spesifik vaka örneklerine ihtiyaç duyulması"
-    ],
-    "candidateId": "k5ubc3iae",
-    "id": "em77uhl29",
-    "createdAt": "2026-04-21T13:52:01.389Z"
-  },
-  {
     "summary": "Aykan SARIDOĞAN, modern frontend teknolojilerinde kapsamlı deneyime sahip, güçlü teknik temellere sahip bir adaydır. Senior düzeydeki beklentileri karşılayan proje geçmişi ve problem çözme yeteneği ile öne çıkmaktadır. Ekip uyumu ve teknik liderlik potansiyeli yüksek bir profil sergilemektedir.",
     "scores": {
       "technicalFit": {

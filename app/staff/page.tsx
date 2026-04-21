@@ -42,6 +42,22 @@ export default function StaffPage() {
     }
   };
 
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm('Bu personeli silmek istediğinize emin misiniz?')) return;
+    try {
+      const res = await fetch(`/api/employees/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setEmployees(employees.filter(emp => emp.id !== id));
+      } else {
+        alert('Silme işlemi başarısız oldu.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Silme sırasında bir hata oluştu.');
+    }
+  };
+
   const getAttendanceForEmployee = (empId: string) => {
     return attendances.find(a => a.employeeId === empId);
   };
@@ -80,13 +96,14 @@ export default function StaffPage() {
                 <th style={{ padding: '1.25rem 1.5rem' }}>Bugünkü Durum</th>
                 <th style={{ padding: '1.25rem 1.5rem' }}>Giriş / Çıkış</th>
                 <th style={{ padding: '1.25rem 1.5rem' }}>İşlem</th>
+                <th style={{ padding: '1.25rem 1.5rem' }}></th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
-                <tr><td colSpan={5} style={{ padding: '3rem', textAlign: 'center' }}><Loader2 className="animate-spin" /></td></tr>
+                <tr><td colSpan={6} style={{ padding: '3rem', textAlign: 'center' }}><Loader2 className="animate-spin" /></td></tr>
               ) : employees.length === 0 ? (
-                <tr><td colSpan={5} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>Henüz personel bulunmuyor. Adayı "İşe Al" diyerek personel yapabilirsiniz.</td></tr>
+                <tr><td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>Henüz personel bulunmuyor. Adayı "İşe Al" diyerek personel yapabilirsiniz.</td></tr>
               ) : (
                 employees.map((emp) => {
                   const att = getAttendanceForEmployee(emp.id);
@@ -137,6 +154,15 @@ export default function StaffPage() {
                             <LogIn size={12} /> Giriş Yap
                           </button>
                         )}
+                      </td>
+                      <td style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>
+                        <button
+                          onClick={(e) => handleDelete(emp.id, e)}
+                          title="Sil"
+                          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+                        >
+                          <MoreHorizontal size={18} />
+                        </button>
                       </td>
                     </tr>
                   );
