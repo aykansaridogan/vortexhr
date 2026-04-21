@@ -1,0 +1,70 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Job {
+  id          String      @id @default(cuid())
+  title       String
+  department  String
+  description String
+  status      String      @default("OPEN") // OPEN, CLOSED
+  candidates  Candidate[]
+  employees   Employee[]
+  createdAt   DateTime    @default(now())
+}
+
+model Candidate {
+  id              String    @id @default(cuid())
+  name            String
+  email           String?
+  phone           String?
+  status          String    @default("APPLIED") // APPLIED, SCREENING, INTERVIEW, OFFER, REJECTED
+  resumeText      String?
+  cvUrl           String?
+  jobId           String
+  job             Job       @relation(fields: [jobId], references: [id])
+  analysis        Analysis?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Employee {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  role        String
+  department  String
+  startDate   DateTime     @default(now())
+  attendances Attendance[]
+  jobId       String?
+  job         Job?         @relation(fields: [jobId], references: [id])
+}
+
+model Attendance {
+  id         String   @id @default(cuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  checkIn    DateTime @default(now())
+  checkOut   DateTime?
+  status     String   @default("PRESENT") // PRESENT, LATE, REMOTE
+}
+
+model Analysis {
+  id              String    @id @default(cuid())
+  summary         String
+  technicalScore  Int
+  architectureScore Int
+  experienceScore Int
+  softSkillsScore Int
+  reasoning       String    // JSON stringified details
+  chainOfThought  String    // JSON stringified steps
+  decision        String
+  candidateId     String    @unique
+  candidate       Candidate @relation(fields: [candidateId], references: [id])
+  createdAt       DateTime  @default(now())
+}
