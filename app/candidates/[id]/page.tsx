@@ -67,7 +67,6 @@ export default function CandidateDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: candidate.job.title,
-          title: candidate.job?.title,
           stack: candidate.resumeText,
           jobDescription: candidate.job?.description,
           gaps: candidate.analysis?.gaps || []
