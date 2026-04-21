@@ -15,11 +15,16 @@ export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [error, setError] = useState("");
+  const [stats, setStats] = useState<any>(null);
 
   useEffect(() => {
     fetch("/api/jobs")
       .then(res => res.json())
       .then(data => setJobs(data));
+      
+    fetch("/api/stats")
+      .then(res => res.json())
+      .then(data => setStats(data));
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,10 +100,10 @@ export default function Home() {
           {/* Stats Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {[
-              { label: 'Aktif İlanlar', value: '12', icon: <Briefcase size={20} /> },
-              { label: 'Toplam Başvuru', value: '1,284', icon: <Users size={20} /> },
-              { label: 'Analiz Edilen CV', value: '942', icon: <FileText size={20} /> },
-              { label: 'AI Karar Destek', value: '89%', icon: <Zap size={20} /> },
+              { label: 'Aktif İlanlar', value: stats?.totalJobs || '0', icon: <Briefcase size={20} /> },
+              { label: 'Toplam Başvuru', value: stats?.totalCandidates || '0', icon: <Users size={20} /> },
+              { label: 'Analiz Edilen CV', value: stats?.analyzedCandidates || '0', icon: <FileText size={20} /> },
+              { label: 'AI Karar Destek', value: `${stats?.aiSuccessRate || 0}%`, icon: <Zap size={20} /> },
             ].map((stat, i) => (
               <motion.div 
                 key={i}
@@ -219,7 +224,7 @@ export default function Home() {
 
             {/* Sidebar info */}
             <section style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <HiringFunnel />
+              <HiringFunnel data={stats?.funnel} />
               
               <div className="glass" style={{ padding: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>Sistem Notu</h3>

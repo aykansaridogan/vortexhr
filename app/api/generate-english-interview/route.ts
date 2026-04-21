@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const { title } = await request.json();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-lite-latest" });
 
     const prompt = `
       Sen profesyonel bir İngilizce dil eğitmeni ve teknik mülakatçısın. 

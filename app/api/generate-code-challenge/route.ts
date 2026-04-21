@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const { title, stack } = await request.json();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-lite-latest" });
 
     const prompt = `
       Sen kıdemli bir yazılım mimarısın. 

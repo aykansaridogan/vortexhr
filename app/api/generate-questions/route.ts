@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const { candidateInfo, jobDescription, gaps } = await request.json();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-lite-latest" });
 
     const prompt = `
       Sen profesyonel bir teknik mülakatçısın. 
@@ -17,18 +17,21 @@ export async function POST(request: Request) {
       ADAY ANALİZİ ÖZETİ: ${JSON.stringify(gaps)}
       İŞ TANIMI: ${jobDescription}
       
-      Sorular; teknik derinlik, problem çözme ve ekip uyumu üzerine odaklanmalıdır.
-      Sadece 5 adet soru cümlesi içeren bir liste döndür. Format:
-      ["Soru 1", "Soru 2", "Soru 3", "Soru 4", "Soru 5"]
+      Yalnızca 5 adet soru cümlesi içeren bir JSON listesi döndür. Metin ekleme.
+      Örn: ["Soru 1", "Soru 2", "Soru 3", "Soru 4", "Soru 5"]
     `;
 
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    let text = result.response.text().trim();
     
-    // Parse JSON string from AI response
-    const cleanJson = text.replace(/```json|```/g, "").trim();
-    const questions = JSON.parse(cleanJson);
+    // Agresif JSON Temizleme
+    const firstBrace = text.indexOf('[');
+    const lastBrace = text.lastIndexOf(']');
+    if (firstBrace !== -1 && lastBrace !== -1) {
+      text = text.substring(firstBrace, lastBrace + 1);
+    }
+    
+    const questions = JSON.parse(text);
 
     return NextResponse.json({ questions });
   } catch (error: any) {
